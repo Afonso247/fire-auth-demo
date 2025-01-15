@@ -1,21 +1,43 @@
 <template>
     <div>
       <h1>Login</h1>
-      <form>
+      <form @submit.prevent="handleLogin">
         <label>Email:</label>
-        <input type="email" />
+        <input v-model="email" type="email" placeholder="Seu email" required />
   
         <label>Senha:</label>
-        <input type="password" />
+        <input v-model="password" type="password" placeholder="Sua senha" required />
   
         <button type="submit">Entrar</button>
       </form>
+      <p v-if="error">{{ error }}</p>
     </div>
   </template>
   
   <script>
+  import { auth } from '../firebase';
+  import { signInWithEmailAndPassword } from 'firebase/auth';
+
   export default {
     name: 'Login',
+    data() {
+      return {
+        email: '',
+        password: '',
+        error: '',
+      };
+    },
+    methods: {
+      async handleLogin() {
+        await signInWithEmailAndPassword(auth, this.email, this.password)
+          .then(() => {
+            this.$router.push('/');
+          })
+          .catch((error) => {
+            this.error = 'Erro ao fazer login: ' + error.message;
+          });
+      },
+    },
   };
   </script>
   

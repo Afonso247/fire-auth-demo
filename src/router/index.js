@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '../firebase'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -10,6 +11,9 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/login',
@@ -22,6 +26,15 @@ const router = createRouter({
       component: RegisterView,
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const user = auth.currentUser
+  if (to.meta.requiresAuth && !user) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router
