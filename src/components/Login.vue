@@ -10,6 +10,7 @@
   
         <button type="submit">Entrar</button>
       </form>
+      <p>Ainda não possui uma conta? <router-link to="/register">Registrar-se</router-link></p>
       <p v-if="error">{{ error }}</p>
     </div>
   </template>
