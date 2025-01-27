@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Register</router-link>
+    <nav class="navbar">
+      <router-link to="/" class="nav-link">Home</router-link>
+      <router-link to="/login" class="nav-link">Login</router-link>
+      <router-link to="/register" class="nav-link">Register</router-link>
     </nav>
     <router-view />
   </div>
@@ -16,11 +16,24 @@ export default {
 </script>
 
 <style>
-nav {
+.navbar {
   display: flex;
-  gap: 1em;
-  background: #f3f3f3;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+  justify-content: space-between; /* Align items to opposite ends */
+  align-items: center;
+  padding: 0rem 5rem;
+  background-color: #333; /* Darker background for better contrast */
+  color: #fff; /* White text color */
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #555;
 }
 </style>
