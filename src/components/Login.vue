@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="login">
       <h1>Login</h1>
       <form @submit.prevent="handleLogin">
         <label>Email:</label>
@@ -43,6 +43,14 @@
   </script>
   
   <style>
+  .login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
   form {
     display: flex;
     flex-direction: column;
