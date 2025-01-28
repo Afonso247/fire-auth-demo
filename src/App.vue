@@ -3,7 +3,7 @@
     <nav class="navbar">
       <router-link to="/" class="nav-link">Home</router-link>
       <router-link to="/login" class="nav-link">Login</router-link>
-      <router-link to="/register" class="nav-link">Register</router-link>
+      <router-link to="/register" class="nav-link">Registrar-se</router-link>
     </nav>
     <router-view />
   </div>
@@ -18,11 +18,11 @@ export default {
 <style>
 .navbar {
   display: flex;
-  justify-content: space-between; /* Align items to opposite ends */
+  justify-content: space-between;
   align-items: center;
   padding: 0rem 5rem;
-  background-color: #333; /* Darker background for better contrast */
-  color: #fff; /* White text color */
+  background-color: #333;
+  color: #fff;
 }
 
 .nav-link {

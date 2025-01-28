@@ -18,7 +18,7 @@
       <label for="dream">Sonho:</label>
       <input v-model="userInfo.dream" id="dream" placeholder="Digite seu sonho" />
 
-      <button type="submit">Salvar informações</button>
+      <button type="submit" :disabled="isSaving">{{ isSaving ? "Salvando..." : "Salvar informações" }}</button>
     </form>
 
     <div v-if="saved">
@@ -46,6 +46,7 @@ export default {
         dream: "", // Adicionando o campo de sonho
       },
       saved: false, // Estado para exibir mensagem de confirmação
+      isSaving: false,
     };
   },
   methods: {
@@ -54,32 +55,40 @@ export default {
       this.$router.push("/login");
     },
     async saveUserInfo() {
+      this.isSaving = true;
       const user = auth.currentUser;
 
       if (user) {
-        // Salvar no Realtime Database
-        const userRef = dbRef(database, `users/${user.uid}`);
-        await set(userRef, this.userInfo)
-          .then(() => {
-            this.saved = true; // Exibe mensagem de confirmação
-            setTimeout(() => (this.saved = false), 3000); // Remove a mensagem após 3 segundos
-          })
-          .catch((error) => {
-            console.error("Erro ao salvar informações no Realtime Database:", error);
-          });
+        const dataToSave = {
+          ...this.userInfo, // Dados do formulário
+          uid: user.uid,    // ID único do usuário
+          email: user.email // Email do usuário
+        };
 
-        // Salvar no Firestore
         try {
-          const userDocRef = doc(db, "users", user.uid); // Documento do usuário no Firestore
-          await setDoc(userDocRef, this.userInfo);
-          console.log("Informações salvas no Firestore com sucesso!");
+          // Salvar no Realtime Database
+          const userRef = dbRef(database, `users/${user.uid}`);
+          await set(userRef, dataToSave);
+
+          // Salvar no Firestore
+          const userDocRef = doc(db, "users", user.uid);
+          await setDoc(userDocRef, dataToSave);
+
+          // Atualizar estado de sucesso
+          this.saved = true;
+          setTimeout(() => (this.saved = false), 3000); // Remove mensagem após 3 segundos
+          console.log("Informações salvas com sucesso no Firebase!");
         } catch (error) {
-          console.error("Erro ao salvar informações no Firestore:", error);
+          console.error("Erro ao salvar informações:", error);
+          alert("Ocorreu um erro ao salvar suas informações. Tente novamente mais tarde.");
+        } finally {
+          this.isSaving = false;
         }
       } else {
         console.error("Usuário não autenticado!");
+        alert("Você precisa estar logado para salvar as informações.");
       }
-    },
+    }
   },
 };
 </script>
